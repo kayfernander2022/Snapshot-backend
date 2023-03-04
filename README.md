@@ -1,6 +1,6 @@
 ## Capstone App - Backend
 
-Using a mongo db to build a full crud backend application where a user can store and edit pictures, add and delete friends from a friends list and view their uploaded pictures as well. 
+Using a webapi to build a full crud backend application where a user can store and edit pictures, add and delete friends from a friends list and view their uploaded pictures as well. 
 
 ### [Link to Deployed Backend]() ON RENDER
 
@@ -18,7 +18,7 @@ Using a mongo db to build a full crud backend application where a user can store
 
 
 ### Models
-![image](./project4model2.png)
+![image](./capstonemodel.png)
 
 ### Backend Route Table
 
