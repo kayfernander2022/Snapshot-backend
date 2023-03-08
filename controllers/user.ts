@@ -6,8 +6,8 @@ const router = express.Router();
 router.post('/api/user', async(req: Request, res: Response) =>{
   const { username, password } = req.body;
   console.log('creating user');
-  const user = User.build({ username, password});
-  await user.save();
+  const user = User.create({ username, password});
+ 
   return res.status(201).send(user);
 });
 

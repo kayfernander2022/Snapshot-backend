@@ -4,6 +4,7 @@ import express from 'express';
 import morgan from 'morgan'
 import mongoose from 'mongoose';
 import {userRouter} from '../controllers/user';
+import {friendRouter} from '../controllers/friend';
 import StartMongoose from '../models/connection';
 const { PORT = 3000, DATABASE_URL } = process.env
 /////////////////////////
@@ -19,7 +20,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(userRouter);
-
+app.use(friendRouter);
 
 
 

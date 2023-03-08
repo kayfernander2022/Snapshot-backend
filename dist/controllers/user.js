@@ -11,8 +11,7 @@ exports.userRouter = router;
 router.post('/api/user', async (req, res) => {
     const { username, password } = req.body;
     console.log('creating user');
-    const user = user_1.default.build({ username, password });
-    await user.save();
+    const user = user_1.default.create({ username, password });
     return res.status(201).send(user);
 });
 router.get("/api/user/all", async (req, res) => {
