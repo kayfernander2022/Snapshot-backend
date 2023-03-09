@@ -13,7 +13,7 @@ router.post('/api/user', async(req: Request, res: Response) =>{
 
 
 
-router.get("/api/user/all", async (req: Request, res: Response) => {
+router.get("/api/users", async (req: Request, res: Response) => {
   const users = await User.find({});
 
   res.status(200).send(users);

@@ -14,7 +14,7 @@ router.post('/api/user', async (req, res) => {
     const user = user_1.default.create({ username, password });
     return res.status(201).send(user);
 });
-router.get("/api/user/all", async (req, res) => {
+router.get("/api/users", async (req, res) => {
     const users = await user_1.default.find({});
     res.status(200).send(users);
 });

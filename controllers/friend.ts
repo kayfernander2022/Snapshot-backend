@@ -3,6 +3,9 @@ import Friend from '../models/friend'
 
 const router = express.Router();
 
+
+
+
 router.post('/api/friend', async(req: Request, res: Response) =>{
   const { userId, friendId } = req.body;
   console.log('creating friend');
@@ -13,7 +16,7 @@ router.post('/api/friend', async(req: Request, res: Response) =>{
 
 
 
-router.get("/api/friend/all", async (req: Request, res: Response) => {
+router.get("/api/friends", async (req: Request, res: Response) => {
   const friends = await Friend.find({});
 
   res.status(200).send(friends);

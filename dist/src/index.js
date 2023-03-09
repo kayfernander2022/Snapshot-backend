@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const user_1 = require("../controllers/user");
 const friend_1 = require("../controllers/friend");
+const photo_1 = require("../controllers/photo");
 const connection_1 = __importDefault(require("../models/connection"));
 const { PORT = 3000, DATABASE_URL } = process.env;
 /////////////////////////
@@ -23,6 +24,7 @@ app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 app.use(user_1.userRouter);
 app.use(friend_1.friendRouter);
+app.use(photo_1.photoRouter);
 /////////////////////////
 // Routes
 /////////////////////////

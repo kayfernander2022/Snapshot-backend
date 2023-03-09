@@ -14,7 +14,7 @@ router.post('/api/friend', async (req, res) => {
     const friend = friend_1.default.create({ userId, friendId });
     return res.status(201).send(friend);
 });
-router.get("/api/friend/all", async (req, res) => {
+router.get("/api/friends", async (req, res) => {
     const friends = await friend_1.default.find({});
     res.status(200).send(friends);
 });
