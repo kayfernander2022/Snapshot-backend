@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
-interface IUser extends mongoose.Document {
+
+//Interface = contract that defines the properties and datatypes required
+export interface IUser extends mongoose.Document {
   username: string;
   password: string;
 }

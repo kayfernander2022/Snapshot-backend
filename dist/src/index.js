@@ -4,17 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-// import cors from 'cors';
 const morgan_1 = __importDefault(require("morgan"));
 const user_1 = require("../controllers/user");
 const friend_1 = require("../controllers/friend");
 const photo_1 = require("../controllers/photo");
+const sharedTo_1 = require("../controllers/sharedTo");
 const connection_1 = __importDefault(require("../models/connection"));
-const { PORT = 3000, DATABASE_URL } = process.env;
+const { PORT: number = 3000, DATABASE_URL } = process.env;
 /////////////////////////
 // DEPENDENCIES
 /////////////////////////
-//const express = require("express")  //typescript uses ES Module System
 /////////////////////////
 // The Application Object
 /////////////////////////
@@ -25,6 +24,7 @@ app.use(express_1.default.json());
 app.use(user_1.userRouter);
 app.use(friend_1.friendRouter);
 app.use(photo_1.photoRouter);
+app.use(sharedTo_1.sharedToRouter);
 /////////////////////////
 // Routes
 /////////////////////////

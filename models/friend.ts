@@ -1,5 +1,7 @@
 import mongoose, { ObjectId, Schema } from "mongoose";
 
+
+//Interface = contract that defines the properties and datatypes required
 interface IFriend extends mongoose.Document {
   userId: ObjectId,
   friendId: ObjectId
