@@ -96,7 +96,7 @@ router.get("/api/users/:userId", async (req: Request, res: Response) =>{
 router.post("/api/users/login",async (req: Request, res: Response) => {
   try {
     const {username, password} = req.body
-    const user = await User.findOne({username});
+    const user = await User.findOne({username: username.toLowerCase()});
 
     if (user) {
         const match = await bcrypt.compare(password, user.password)
