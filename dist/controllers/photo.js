@@ -6,9 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.photoRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const photo_1 = __importDefault(require("../models/photo"));
+const sharedTo_1 = __importDefault(require("../models/sharedTo"));
 const router = express_1.default.Router();
 exports.photoRouter = router;
-router.post('/api/photo', async (req, res) => {
+router.post('/api/photos', async (req, res) => {
     const { imageUrl, caption, userId } = req.body;
     console.log('creating photo');
     const photo = await photo_1.default.create({ imageUrl, caption, userId });
@@ -38,6 +39,8 @@ router.put("/api/photos/:photoId", async (req, res) => {
 router.delete("/api/:photoId", async (req, res) => {
     const photoId = req.params.photoId;
     await photo_1.default.findByIdAndDelete(photoId);
+    //Delete from shared to table so that will not have orphaned records.
+    await sharedTo_1.default.deleteMany({ photoId: photoId });
     res.send();
 });
 //# sourceMappingURL=photo.js.map

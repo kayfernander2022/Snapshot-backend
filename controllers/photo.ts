@@ -1,9 +1,10 @@
 import express, {Request, Response } from 'express'
 import Photo from '../models/photo'
+import SharedTo from '../models/sharedTo';
 
 const router = express.Router();
 
-router.post('/api/photo', async(req: Request, res: Response) =>{
+router.post('/api/photos', async(req: Request, res: Response) =>{
   const { imageUrl, caption, userId } = req.body;
   console.log('creating photo');
   const photo = await Photo.create({ imageUrl, caption, userId});
@@ -49,6 +50,9 @@ router.delete("/api/:photoId", async (req: Request, res: Response) =>{
   
   await Photo.findByIdAndDelete(photoId)
   
+  //Delete from shared to table so that will not have orphaned records.
+  await SharedTo.deleteMany({photoId: photoId});
+
   res.send()
   })
 

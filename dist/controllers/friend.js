@@ -6,17 +6,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.friendRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const friend_1 = __importDefault(require("../models/friend"));
+const user_1 = __importDefault(require("../models/user"));
+const sharedTo_1 = __importDefault(require("../models/sharedTo"));
 const router = express_1.default.Router();
 exports.friendRouter = router;
-router.post('/api/friend', async (req, res) => {
+router.post('/api/friends', async (req, res) => {
     const { userId, friendId } = req.body;
     console.log('creating friend');
+    // Check and see if user and friend exist in the user table.  Required to access the app.
+    const userExists = await user_1.default.findById(userId);
+    const friendExists = await user_1.default.findById(friendId);
+    // If either do not exists then throw a 404 - Not Found error back to the client
+    if (!userExists || !friendExists) {
+        return res.status(404).send(!userExists ? { error: 'User not found' } : { error: 'Friend not found' }); // Return message based on which was not found user or friend
+    }
+    // Check to see if friend / user relationship already recorded in the friend table.  If it exists we just return 200 - Success to 
+    // not create duplicates.  If the relationship does not exist we create it for the first time
     const exists = await friend_1.default.find({ userId: userId, friendId: friendId });
     console.log(exists);
+    // If none found we create record
     if (exists.length === 0) {
         const friend = await friend_1.default.create({ userId, friendId });
         return res.status(201).send(friend);
     }
+    // This is only hit if the record already existed and we skip creating to avoid duplicates.
     return res.send();
 });
 router.get("/api/friends", async (req, res) => {
@@ -37,6 +50,8 @@ router.get("/api/friends/addedMe/:friendId", async (req, res) => {
 router.delete("/api/friends/:friendId", async (req, res) => {
     const friendId = req.params.friendId;
     await friend_1.default.findByIdAndDelete(friendId);
+    // Need to delete from SharedTo so that we do not have orphan records
+    await sharedTo_1.default.deleteMany({ friendId: friendId });
     res.send();
 });
 //# sourceMappingURL=friend.js.map
