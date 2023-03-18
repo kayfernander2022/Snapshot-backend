@@ -1,13 +1,17 @@
-import express, {Request, Response } from 'express'
+import express, {Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import User from '../models/user'
 import Friend from '../models/friend';
 import Photo from '../models/photo';
 import SharedTo from '../models/sharedTo';
 
+const {SECRET} = process.env;
 const router = express.Router();
 
 router.post('/api/users', async(req: Request, res: Response) =>{
-  const { username, password } = req.body;
+  const username = req.body.username;
+  const password = await bcrypt.hash(req.body.password, 10);
 
   const userNameExists = await User.findOne({username: username.toLowerCase()});
 
@@ -15,10 +19,17 @@ router.post('/api/users', async(req: Request, res: Response) =>{
     return res.status(409).send({error: 'Username already exists'})
   }
 
-  console.log('creating user');
-  const user = await User.create({ username: username.toLowerCase(), password});
- 
-  return res.status(201).send(user);
+  try{
+    console.log('creating user');
+
+    const user = await User.create({ username: username.toLowerCase(), password});
+   
+    return res.status(201).send(user);
+  }
+  catch(error){
+    return res.status(400).send(error);
+  }
+  
 });
 
 
@@ -80,6 +91,29 @@ router.get("/api/users/:userId", async (req: Request, res: Response) =>{
   catch(ex){
      console.log(ex);
   }
+})
+
+router.post("/api/users/login",async (req: Request, res: Response) => {
+  try {
+    const {username, password} = req.body
+    const user = await User.findOne({username});
+
+    if (user) {
+        const match = await bcrypt.compare(password, user.password)
+
+        if (match) {
+            const token = await jwt.sign({username}, SECRET || ' ')
+            res.status(200).json({token})
+        } else {
+            res.status(400).json({error: "PASSWORD DOES NOT MATCH"})
+        }
+    } else {
+        res.status(400).json({error: "USER DOES NOT EXIST"})
+    }
+}
+catch(error) {
+    res.status(400).json({error})
+}
 })
 
 export { router as userRouter }
