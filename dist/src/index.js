@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const user_1 = require("../controllers/user");
 const friend_1 = require("../controllers/friend");
@@ -18,7 +19,7 @@ const { PORT: number = 3000, DATABASE_URL } = process.env;
 // The Application Object
 /////////////////////////
 const app = (0, express_1.default)();
-// app.use(cors());
+app.use((0, cors_1.default)());
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 app.use(user_1.userRouter);

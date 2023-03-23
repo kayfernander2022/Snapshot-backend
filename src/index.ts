@@ -1,4 +1,5 @@
 import express, {Application, Request, Response} from 'express';
+import cors from 'cors';
 import morgan from 'morgan';
 import {userRouter} from '../controllers/user';
 import {friendRouter} from '../controllers/friend';
@@ -16,7 +17,7 @@ const { PORT: number = 3000, DATABASE_URL } = process.env;
 // The Application Object
 /////////////////////////
 const app: Application = express();
-// app.use(cors());
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(userRouter);
