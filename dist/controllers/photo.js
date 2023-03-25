@@ -21,12 +21,18 @@ router.get("/api/photos", async (req, res) => {
 });
 router.get("/api/photos/:photoId", async (req, res) => {
     const photoId = req.params.photoId;
-    const photos = await photo_1.default.findById(photoId);
-    res.status(200).send(photos);
+    const tempPhoto = await photo_1.default.findById(photoId);
+    if (tempPhoto) {
+        const photo = convertPhoto(tempPhoto);
+        res.status(200).send(photo);
+    }
 });
 router.get("/api/photos/user/:userId", async (req, res) => {
     const userId = req.params.userId;
-    const photos = await photo_1.default.find({ userId: userId });
+    const tempPhotos = await photo_1.default.find({ userId: userId });
+    const photos = tempPhotos.map((photo) => {
+        return convertPhoto(photo);
+    });
     res.status(200).send(photos);
 });
 //Update 
@@ -43,4 +49,7 @@ router.delete("/api/:photoId", async (req, res) => {
     await sharedTo_1.default.deleteMany({ photoId: photoId });
     res.send();
 });
+function convertPhoto(photo) {
+    return { id: photo.id, caption: photo.caption, imageUrl: photo.imageUrl, userId: photo.userId };
+}
 //# sourceMappingURL=photo.js.map

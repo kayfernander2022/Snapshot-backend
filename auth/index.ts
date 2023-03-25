@@ -1,28 +1,31 @@
 import * as dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const {SECRET} = process.env
 
+export interface UserRequest extends Request{
+    token: string | JwtPayload
+}
 
-const auth = async (req, res, next) => {
+const auth = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        if(req.headers.authorization){
-            console.log("hello world")
-            const token = req.headers.authorization.split(" ")[1]
-            console.log(token)
-            const payload = await jwt.verify(token, SECRET || '')
-            console.log(payload)
-            if(payload){
-                req.payload = payload
-                next()
-            }else{
-                res.status(400).json({error: "VERIFICATION FAILED OR NO PAYLOAD"})
+            if(req.header('Authorization')){
+                console.log("hello world")
+                const token = req.header('Authorization')?.replace('Bearer ', '');
+
+                if(!token){
+                    throw new Error();
+                }
+                else{
+                    const decoded = await jwt.verify(token, SECRET || '');
+                    (req as UserRequest).token = decoded;
+                    next();
+                }
             }
-            }else{
-                res.status(400).json({error: "NO AUTHORIZATION HEADER"})
-            }}
-            catch(error){
-                res.status(400).json({error})
+        }
+        catch(error){
+            res.status(401).send('Please authenticate')
         }
 }
 

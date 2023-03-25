@@ -102,8 +102,11 @@ router.post("/api/users/login",async (req: Request, res: Response) => {
         const match = await bcrypt.compare(password, user.password)
 
         if (match) {
-            const token = await jwt.sign({username}, SECRET || ' ')
-            res.status(200).json({token})
+            const token = await jwt.sign({username}, SECRET || ' ');
+            console.log(JSON.stringify(user))
+            const authUser = {id: user.id, username: user.username, password:user.password, token};
+            console.log(JSON.stringify(authUser))
+            res.status(200).json(authUser)
         } else {
             res.status(400).json({error: "PASSWORD DOES NOT MATCH"})
         }

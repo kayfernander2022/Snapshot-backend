@@ -79,7 +79,10 @@ router.post("/api/users/login", async (req, res) => {
             const match = await bcryptjs_1.default.compare(password, user.password);
             if (match) {
                 const token = await jsonwebtoken_1.default.sign({ username }, SECRET || ' ');
-                res.status(200).json({ token });
+                console.log(JSON.stringify(user));
+                const authUser = { id: user.id, username: user.username, password: user.password, token };
+                console.log(JSON.stringify(authUser));
+                res.status(200).json(authUser);
             }
             else {
                 res.status(400).json({ error: "PASSWORD DOES NOT MATCH" });

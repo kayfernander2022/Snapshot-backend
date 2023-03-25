@@ -2,7 +2,8 @@ import mongoose, { ObjectId, Schema } from "mongoose";
 
 
 //Interface = contract that defines the properties and datatypes required
-interface IPhoto extends mongoose.Document {
+export interface IPhoto {
+  id: ObjectId;
   imageUrl: string;
   caption: string;
   userId: ObjectId
