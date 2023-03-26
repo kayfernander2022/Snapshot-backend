@@ -5,6 +5,7 @@ import {userRouter} from '../controllers/user';
 import {friendRouter} from '../controllers/friend';
 import {photoRouter} from '../controllers/photo';
 import {sharedToRouter} from '../controllers/sharedTo';
+import {imageKitRouter} from '../controllers/imageKit';
 
 import StartMongoose from '../models/connection';
 const { PORT: number = 3000, DATABASE_URL } = process.env;
@@ -24,8 +25,7 @@ app.use(userRouter);
 app.use(friendRouter);
 app.use(photoRouter);
 app.use(sharedToRouter);
-
-
+app.use(imageKitRouter);
 
 /////////////////////////
 // Routes

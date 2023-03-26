@@ -10,6 +10,7 @@ const user_1 = require("../controllers/user");
 const friend_1 = require("../controllers/friend");
 const photo_1 = require("../controllers/photo");
 const sharedTo_1 = require("../controllers/sharedTo");
+const imageKit_1 = require("../controllers/imageKit");
 const connection_1 = __importDefault(require("../models/connection"));
 const { PORT: number = 3000, DATABASE_URL } = process.env;
 /////////////////////////
@@ -26,6 +27,7 @@ app.use(user_1.userRouter);
 app.use(friend_1.friendRouter);
 app.use(photo_1.photoRouter);
 app.use(sharedTo_1.sharedToRouter);
+app.use(imageKit_1.imageKitRouter);
 /////////////////////////
 // Routes
 /////////////////////////
