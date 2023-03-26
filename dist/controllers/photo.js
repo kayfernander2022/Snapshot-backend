@@ -10,9 +10,9 @@ const sharedTo_1 = __importDefault(require("../models/sharedTo"));
 const router = express_1.default.Router();
 exports.photoRouter = router;
 router.post('/api/photos', async (req, res) => {
-    const { imageUrl, caption, userId } = req.body;
+    const { imageUrl, caption, userId, imageName } = req.body;
     console.log('creating photo');
-    const photo = await photo_1.default.create({ imageUrl, caption, userId });
+    const photo = await photo_1.default.create({ imageUrl, caption, userId, imageName });
     return res.status(201).send(photo);
 });
 router.get("/api/photos", async (req, res) => {

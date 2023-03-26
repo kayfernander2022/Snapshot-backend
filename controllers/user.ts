@@ -12,6 +12,7 @@ const router = express.Router();
 router.post('/api/users', async(req: Request, res: Response) =>{
   const username = req.body.username;
   const password = await bcrypt.hash(req.body.password, 10);
+  const name = req.body.name;
 
   const userNameExists = await User.findOne({username: username.toLowerCase()});
 
@@ -22,7 +23,7 @@ router.post('/api/users', async(req: Request, res: Response) =>{
   try{
     console.log('creating user');
 
-    const user = await User.create({ username: username.toLowerCase(), password});
+    const user = await User.create({ username: username.toLowerCase(), password, name});
    
     return res.status(201).send(user);
   }
@@ -37,7 +38,11 @@ router.post('/api/users', async(req: Request, res: Response) =>{
 router.get("/api/users", async (req: Request, res: Response) => {
   const users = await User.find({});
 
-  return res.send(users);
+  const transformUsers = users.map((user) => {
+    return {id: user.id, name: user.name};
+  })
+
+  return res.send(transformUsers);
 })
 
 //Update

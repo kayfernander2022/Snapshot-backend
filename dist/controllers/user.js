@@ -17,13 +17,14 @@ exports.userRouter = router;
 router.post('/api/users', async (req, res) => {
     const username = req.body.username;
     const password = await bcryptjs_1.default.hash(req.body.password, 10);
+    const name = req.body.name;
     const userNameExists = await user_1.default.findOne({ username: username.toLowerCase() });
     if (userNameExists) {
         return res.status(409).send({ error: 'Username already exists' });
     }
     try {
         console.log('creating user');
-        const user = await user_1.default.create({ username: username.toLowerCase(), password });
+        const user = await user_1.default.create({ username: username.toLowerCase(), password, name });
         return res.status(201).send(user);
     }
     catch (error) {
@@ -32,7 +33,10 @@ router.post('/api/users', async (req, res) => {
 });
 router.get("/api/users", async (req, res) => {
     const users = await user_1.default.find({});
-    return res.send(users);
+    const transformUsers = users.map((user) => {
+        return { id: user.id, name: user.name };
+    });
+    return res.send(transformUsers);
 });
 //Update
 router.put("/api/users/:userId", async (req, res) => {

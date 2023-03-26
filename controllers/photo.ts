@@ -5,9 +5,9 @@ import SharedTo from '../models/sharedTo';
 const router = express.Router();
 
 router.post('/api/photos', async(req: Request, res: Response) =>{
-  const { imageUrl, caption, userId } = req.body;
+  const { imageUrl, caption, userId, imageName } = req.body;
   console.log('creating photo');
-  const photo = await Photo.create({ imageUrl, caption, userId});
+  const photo = await Photo.create({ imageUrl, caption, userId, imageName});
  
   return res.status(201).send(photo);
 });

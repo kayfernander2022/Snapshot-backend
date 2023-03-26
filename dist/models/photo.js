@@ -25,6 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const photoSchema = new mongoose_1.default.Schema({
+    imageName: { type: String, required: false },
     imageUrl: { type: String, required: true },
     caption: { type: String, required: true },
     userId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" }
