@@ -1,19 +1,14 @@
 import express, {Request, Response } from 'express'
-import Friend from '../models/friend';
 import SharedTo from '../models/sharedTo'
 import User from '../models/user'
 
 const router = express.Router();
 
 router.post('/api/sharedTos', async (req: Request, res: Response) =>{
-  const { userId, photoId, friendId } = req.body;
+  const { photoId, friendId } = req.body;
   console.log('creating sharedTo');
 
-  const friendRelationship = await Friend.findById(friendId);
-
-  console.log(friendRelationship);
-
-  const friendExists = await User.findById(friendRelationship?.friendId);
+  const friendExists = await User.findById(friendId);
 
   if(!friendExists){
     return res.status(404).send({error: 'Friend does not exists'});

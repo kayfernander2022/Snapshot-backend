@@ -5,17 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sharedToRouter = void 0;
 const express_1 = __importDefault(require("express"));
-const friend_1 = __importDefault(require("../models/friend"));
 const sharedTo_1 = __importDefault(require("../models/sharedTo"));
 const user_1 = __importDefault(require("../models/user"));
 const router = express_1.default.Router();
 exports.sharedToRouter = router;
 router.post('/api/sharedTos', async (req, res) => {
-    const { userId, photoId, friendId } = req.body;
+    const { photoId, friendId } = req.body;
     console.log('creating sharedTo');
-    const friendRelationship = await friend_1.default.findById(friendId);
-    console.log(friendRelationship);
-    const friendExists = await user_1.default.findById(friendRelationship?.friendId);
+    const friendExists = await user_1.default.findById(friendId);
     if (!friendExists) {
         return res.status(404).send({ error: 'Friend does not exists' });
     }

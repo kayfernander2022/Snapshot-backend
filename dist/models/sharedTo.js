@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const sharedToSchema = new mongoose_1.default.Schema({
     photoId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Photo" },
-    friendId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "Friend" }
+    friendId: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" }
 });
 const SharedTo = mongoose_1.default.model('SharedTo', sharedToSchema);
 exports.default = SharedTo;

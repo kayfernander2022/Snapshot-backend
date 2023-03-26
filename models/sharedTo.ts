@@ -9,7 +9,7 @@ interface ISharedTo extends mongoose.Document {
 
 const sharedToSchema = new mongoose.Schema({
   photoId: {type: Schema.Types.ObjectId, required: true, ref: "Photo"},
-  friendId: {type: Schema.Types.ObjectId, required: true, ref: "Friend"}
+  friendId: {type: Schema.Types.ObjectId, required: true, ref: "User"}
 })
 
 const SharedTo = mongoose.model<ISharedTo>('SharedTo', sharedToSchema);
