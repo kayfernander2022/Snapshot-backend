@@ -34,9 +34,12 @@ dotenv.config();
 const router = express_1.default.Router();
 exports.imageKitRouter = router;
 const IMAGEKIT_KEY = process.env.IMAGEKIT_KEY || '';
+//client request for token
 router.get("/api/imagekit-auth", async (req, res) => {
     const imageKit = new imagekit_1.default({ publicKey: 'public_33FjszinEBzlgrIz8+HbC3JVASM=', privateKey: IMAGEKIT_KEY, urlEndpoint: 'https://ik.imagekit.io/jfpi8d5c5/capstone/' });
     const authParams = imageKit.getAuthenticationParameters();
     res.status(200).send(authParams);
 });
+//getting token back for imagekit. 
+//private key used to authenticate public key/client key and generate token. The clients upload is requesting token needed for image kit to store photo.
 //# sourceMappingURL=imageKit.js.map

@@ -31,12 +31,13 @@ const dotenv = __importStar(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
 dotenv.config();
 const DATABASE_URL = process.env.DATABASE_URL;
+//connect to DB // Database Connection
 const connectionOptions = {
     useCreateIndex: true,
     useUnifiedTopology: true,
-    useNewUrlParser: true,
+    useNewUrlParser: true
 };
-// Database Connection
+// Export the Connection
 function StartMongoose() {
     mongoose_1.default.set('strictQuery', false);
     mongoose_1.default.connect(DATABASE_URL || '');
@@ -46,5 +47,4 @@ function StartMongoose() {
         .on("error", (error) => console.log(error));
 }
 exports.default = StartMongoose;
-// Export the Connection
 //# sourceMappingURL=connection.js.map

@@ -1,9 +1,31 @@
 import express, {Request, Response } from 'express'
 import Photo, {IPhoto} from '../models/photo'
 import SharedTo from '../models/sharedTo';
+import { ObjectId } from 'mongoose';
 
 const router = express.Router();
 
+
+interface IConvertedPhoto{
+  id: ObjectId,
+  caption: string,
+  imageUrl: string,
+  userId: ObjectId
+}
+
+// function to convert the IPhoto object from the database to an object that the client expects.
+// Strips away all of the Mongoose document properties not needed.
+function convertPhoto(photo:IPhoto): IConvertedPhoto{
+  return {
+          id: photo.id, 
+          caption: photo.caption,
+          imageUrl: photo.imageUrl, 
+          userId: photo.userId 
+        }
+}
+
+// Create 
+//single photo.
 router.post('/api/photos', async(req: Request, res: Response) =>{
   const { imageUrl, caption, userId, imageName } = req.body;
   console.log('creating photo');
@@ -12,12 +34,8 @@ router.post('/api/photos', async(req: Request, res: Response) =>{
   return res.status(201).send(photo);
 });
 
-router.get("/api/photos", async (req: Request, res: Response) => {
-  const photos = await Photo.find({});
-
-  res.status(200).send(photos);
-})
-
+// Show
+// return single photo
 router.get("/api/photos/:photoId", async (req: Request, res: Response) => {
   const photoId = req.params.photoId;
 
@@ -31,19 +49,22 @@ router.get("/api/photos/:photoId", async (req: Request, res: Response) => {
   }
 })
 
+//Index
+// return all photos belonging to the user
 router.get("/api/photos/user/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
 
-  const tempPhotos = await Photo.find({userId: userId}) as IPhoto[];
-
+  const tempPhotos = await Photo.find({userId: userId}) as IPhoto[];//get photos back from db as Iphoto
+//map an create a new object to solve problem. Data was coming back in dif format then what was needed.(too much)
   const photos = tempPhotos.map((photo) => {
-    return convertPhoto(photo);
+    return convertPhoto(photo); //return new object
   })
 
   res.status(200).send(photos);
 })
 
 //Update 
+//update a single photo
 router.put("/api/photos/:photoId", async (req: Request, res: Response)=>{
   const photoId = req.params.photoId;
 
@@ -53,7 +74,8 @@ router.put("/api/photos/:photoId", async (req: Request, res: Response)=>{
 })
 
 
-//Delete
+//Delete 
+//delete a single photo
 router.delete("/api/:photoId", async (req: Request, res: Response) =>{
   const photoId: string = req.params.photoId
   
@@ -65,9 +87,7 @@ router.delete("/api/:photoId", async (req: Request, res: Response) =>{
   res.send()
   })
 
-function convertPhoto(photo:IPhoto){
-  return {id: photo.id, caption: photo.caption, imageUrl: photo.imageUrl, userId: photo.userId }
 
-}
+
 
 export { router as photoRouter }

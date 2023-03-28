@@ -14,6 +14,7 @@ const sharedTo_1 = __importDefault(require("../models/sharedTo"));
 const { SECRET } = process.env;
 const router = express_1.default.Router();
 exports.userRouter = router;
+//Create??
 router.post('/api/users', async (req, res) => {
     const username = req.body.username;
     const password = await bcryptjs_1.default.hash(req.body.password, 10);
@@ -31,6 +32,7 @@ router.post('/api/users', async (req, res) => {
         return res.status(400).send(error);
     }
 });
+// 
 router.get("/api/users", async (req, res) => {
     const users = await user_1.default.find({});
     const transformUsers = users.map((user) => {
@@ -38,43 +40,7 @@ router.get("/api/users", async (req, res) => {
     });
     return res.send(transformUsers);
 });
-//Update
-router.put("/api/users/:userId", async (req, res) => {
-    const userId = req.params.userId;
-    const user = await user_1.default.findByIdAndUpdate(userId, req.body, { new: true });
-    return res.status(201).send(user);
-});
-//Delete 
-router.delete("/api/users/:userId", async (req, res) => {
-    const userId = req.params.userId;
-    // Find all of the users photo
-    const photos = await photo_1.default.find({ userId: userId });
-    // Delete all of the links where the photo was shared to someone by using the photoId
-    photos.forEach(async (photo) => {
-        await sharedTo_1.default.deleteMany({ photoId: photo.id });
-    });
-    //Delete all photos belonging to the user
-    await photo_1.default.deleteMany({ userId: userId });
-    // Delete all of the links where someone made me a friend
-    await friend_1.default.deleteMany({ friendId: userId });
-    // Delete all of the links where user listed someone as a friend
-    await friend_1.default.deleteMany({ userId: userId });
-    //Finally delete the user
-    await user_1.default.findByIdAndDelete(userId);
-    res.send();
-});
-//Show
-router.get("/api/users/:userId", async (req, res) => {
-    const userId = req.params.userId;
-    console.log('UserId' + userId);
-    try {
-        const users = await user_1.default.findById(userId);
-        return res.send(users);
-    }
-    catch (ex) {
-        console.log(ex);
-    }
-});
+//
 router.post("/api/users/login", async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -99,5 +65,43 @@ router.post("/api/users/login", async (req, res) => {
     catch (error) {
         res.status(400).json({ error });
     }
+});
+//Show
+router.get("/api/users/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    console.log('UserId' + userId);
+    try {
+        const users = await user_1.default.findById(userId);
+        return res.send(users);
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+});
+//Update
+router.put("/api/users/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    const user = await user_1.default.findByIdAndUpdate(userId, req.body, { new: true });
+    return res.status(201).send(user);
+});
+//Delete 
+//delete a user
+router.delete("/api/users/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    // Find all of the users photo
+    const photos = await photo_1.default.find({ userId: userId });
+    // Delete all of the links where the photo was shared to someone by using the photoId
+    photos.forEach(async (photo) => {
+        await sharedTo_1.default.deleteMany({ photoId: photo.id });
+    });
+    //Delete all photos belonging to the user
+    await photo_1.default.deleteMany({ userId: userId });
+    // Delete all of the links where someone made me a friend
+    await friend_1.default.deleteMany({ friendId: userId });
+    // Delete all of the links where user listed someone as a friend
+    await friend_1.default.deleteMany({ userId: userId });
+    //Finally delete the user
+    await user_1.default.findByIdAndDelete(userId);
+    res.send();
 });
 //# sourceMappingURL=user.js.map

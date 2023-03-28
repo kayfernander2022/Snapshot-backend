@@ -9,6 +9,8 @@ import SharedTo from '../models/sharedTo';
 const {SECRET} = process.env;
 const router = express.Router();
 
+
+//Create??
 router.post('/api/users', async(req: Request, res: Response) =>{
   const username = req.body.username;
   const password = await bcrypt.hash(req.body.password, 10);
@@ -34,7 +36,7 @@ router.post('/api/users', async(req: Request, res: Response) =>{
 });
 
 
-
+// 
 router.get("/api/users", async (req: Request, res: Response) => {
   const users = await User.find({});
 
@@ -45,6 +47,54 @@ router.get("/api/users", async (req: Request, res: Response) => {
   return res.send(transformUsers);
 })
 
+
+
+//
+router.post("/api/users/login",async (req: Request, res: Response) => {
+  try {
+    const {username, password} = req.body
+    const user = await User.findOne({username: username.toLowerCase()});
+
+    if (user) {
+        const match = await bcrypt.compare(password, user.password)
+
+        if (match) {
+            const token = await jwt.sign({username}, SECRET || ' ');
+            console.log(JSON.stringify(user))
+            const authUser = {id: user.id, username: user.username, password:user.password, token};
+            console.log(JSON.stringify(authUser))
+            res.status(200).json(authUser)
+        } else {
+            res.status(400).json({error: "PASSWORD DOES NOT MATCH"})
+        }
+    } else {
+        res.status(400).json({error: "USER DOES NOT EXIST"})
+    }
+}
+catch(error) {
+    res.status(400).json({error})
+}
+})
+
+
+//Show
+router.get("/api/users/:userId", async (req: Request, res: Response) =>{
+  const userId = req.params.userId;
+
+  console.log('UserId' + userId);
+
+  try{
+
+  const users = await User.findById(userId);
+
+  return res.send(users);
+  }
+  catch(ex){
+    console.log(ex);
+  }
+})
+
+
 //Update
 router.put("/api/users/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
@@ -54,7 +104,9 @@ router.put("/api/users/:userId", async (req: Request, res: Response) => {
   return res.status(201).send(user);
 })
 
+
 //Delete 
+//delete a user
 router.delete("/api/users/:userId", async (req: Request, res: Response) =>{
   const userId = req.params.userId;
 
@@ -81,47 +133,6 @@ router.delete("/api/users/:userId", async (req: Request, res: Response) =>{
   res.send();
 })
 
-//Show
-router.get("/api/users/:userId", async (req: Request, res: Response) =>{
-  const userId = req.params.userId;
 
-  console.log('UserId' + userId);
-
-  try{
-
-  const users = await User.findById(userId);
-
-  return res.send(users);
-  }
-  catch(ex){
-     console.log(ex);
-  }
-})
-
-router.post("/api/users/login",async (req: Request, res: Response) => {
-  try {
-    const {username, password} = req.body
-    const user = await User.findOne({username: username.toLowerCase()});
-
-    if (user) {
-        const match = await bcrypt.compare(password, user.password)
-
-        if (match) {
-            const token = await jwt.sign({username}, SECRET || ' ');
-            console.log(JSON.stringify(user))
-            const authUser = {id: user.id, username: user.username, password:user.password, token};
-            console.log(JSON.stringify(authUser))
-            res.status(200).json(authUser)
-        } else {
-            res.status(400).json({error: "PASSWORD DOES NOT MATCH"})
-        }
-    } else {
-        res.status(400).json({error: "USER DOES NOT EXIST"})
-    }
-}
-catch(error) {
-    res.status(400).json({error})
-}
-})
 
 export { router as userRouter }

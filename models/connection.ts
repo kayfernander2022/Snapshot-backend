@@ -3,15 +3,16 @@ import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
 dotenv.config();
-
 const DATABASE_URL = process.env.DATABASE_URL;
+
+//connect to DB // Database Connection
 const connectionOptions = {
   useCreateIndex:true, 
   useUnifiedTopology: true,
-  useNewUrlParser: true,}
+  useNewUrlParser: true
+}
 
-
-// Database Connection
+// Export the Connection
 export default function StartMongoose()
 {
 mongoose.set('strictQuery', false)
@@ -24,4 +25,4 @@ mongoose.connection
 }
 
 
-// Export the Connection
+

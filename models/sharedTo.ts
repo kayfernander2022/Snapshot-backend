@@ -1,9 +1,9 @@
 import mongoose, { ObjectId, Schema } from "mongoose";
-
+import { IPhoto } from "./photo";
 
 //Interface = contract that defines the properties and datatypes required
-interface ISharedTo extends mongoose.Document {
-  photoId: ObjectId,
+export interface ISharedTo extends mongoose.Document {
+  photoId: IPhoto,
   friendId: ObjectId
 }
 

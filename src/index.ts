@@ -1,3 +1,6 @@
+/////////////////////////
+// DEPENDENCIES
+/////////////////////////
 import express, {Application, Request, Response} from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -10,12 +13,10 @@ import {imageKitRouter} from '../controllers/imageKit';
 import StartMongoose from '../models/connection';
 const { PORT: number = 3000, DATABASE_URL } = process.env;
 
-/////////////////////////
-// DEPENDENCIES
-/////////////////////////
+
 
 /////////////////////////
-// The Application Object
+// The Application Object / middleware / routers
 /////////////////////////
 const app: Application = express();
 app.use(cors());
@@ -42,6 +43,5 @@ StartMongoose();
 /////////////////////////
 // Listener
 /////////////////////////
-//const port = process.env.PORT || 3000;
 
 app.listen(4040, () => console.log("Listening on port 4040"))

@@ -10,6 +10,7 @@ const user_1 = __importDefault(require("../models/user"));
 const sharedTo_1 = __importDefault(require("../models/sharedTo"));
 const router = express_1.default.Router();
 exports.friendRouter = router;
+//Create
 router.post('/api/friends', async (req, res) => {
     const { userId, friendId } = req.body;
     console.log('creating friend');
@@ -18,13 +19,13 @@ router.post('/api/friends', async (req, res) => {
     const friendExists = await user_1.default.findById(friendId);
     // If either do not exists then throw a 404 - Not Found error back to the client
     if (!userExists || !friendExists) {
-        return res.status(404).send(!userExists ? { error: 'User not found' } : { error: 'Friend not found' }); // Return message based on which was not found user or friend
+        return res.status(404).send(!userExists ? { error: 'User not found' } : { error: 'Friend not found' }); // Return message of who was not found user or friend
     }
     // Check to see if friend / user relationship already recorded in the friend table.  If it exists we just return 200 - Success to 
-    // not create duplicates.  If the relationship does not exist we create it for the first time
+    // not create duplicates.  If the relationship does not exist create it for the first time
     const exists = await friend_1.default.find({ userId: userId, friendId: friendId });
     console.log(exists);
-    // If none found we create record
+    // If none found create record
     if (exists.length === 0) {
         const friend = await friend_1.default.create({ userId, friendId });
         return res.status(201).send(friend);
@@ -32,10 +33,12 @@ router.post('/api/friends', async (req, res) => {
     // This is only hit if the record already existed and we skip creating to avoid duplicates.
     return res.send();
 });
+//Index
 router.get("/api/friends", async (req, res) => {
     const friends = await friend_1.default.find({});
     res.status(200).send(friends);
 });
+//Show
 router.get("/api/friends/:userId", async (req, res) => {
     const userId = req.params.userId;
     const friends = await friend_1.default.find({ userId: userId });
@@ -50,7 +53,7 @@ router.get("/api/friends/addedMe/:friendId", async (req, res) => {
 router.delete("/api/friends/:friendId", async (req, res) => {
     const friendId = req.params.friendId;
     await friend_1.default.findByIdAndDelete(friendId);
-    // Need to delete from SharedTo so that we do not have orphan records
+    // Need to delete from SharedTo so that I do not have orphan records that were created!
     await sharedTo_1.default.deleteMany({ friendId: friendId });
     res.send();
 });
