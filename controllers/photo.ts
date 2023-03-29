@@ -10,7 +10,8 @@ interface IConvertedPhoto{
   id: ObjectId,
   caption: string,
   imageUrl: string,
-  userId: ObjectId
+  userId: ObjectId,
+  imageName: string
 }
 
 // function to convert the IPhoto object from the database to an object that the client expects.
@@ -20,7 +21,8 @@ function convertPhoto(photo:IPhoto): IConvertedPhoto{
           id: photo.id, 
           caption: photo.caption,
           imageUrl: photo.imageUrl, 
-          userId: photo.userId 
+          userId: photo.userId,
+          imageName: photo.imageName 
         }
 }
 
