@@ -31,7 +31,9 @@ router.post('/api/photos', async(req: Request, res: Response) =>{
   console.log('creating photo');
   const photo = await Photo.create({ imageUrl, caption, userId, imageName});
  
-  return res.status(201).send(photo);
+  const convertedPhoto = convertPhoto(photo);
+
+  return res.status(201).send(convertedPhoto);
 });
 
 // Show
@@ -70,7 +72,14 @@ router.put("/api/photos/:photoId", async (req: Request, res: Response)=>{
 
   const photo = await Photo.findByIdAndUpdate(photoId, req.body, {new: true});
 
-  return res.status(201).send(photo);
+  if(photo)
+  {
+    const convertedPhoto = convertPhoto(photo);
+
+    return res.status(201).send(convertedPhoto);
+  }
+
+  return res.status(200);
 })
 
 
