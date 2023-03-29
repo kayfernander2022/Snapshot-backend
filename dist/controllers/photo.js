@@ -16,7 +16,8 @@ function convertPhoto(photo) {
         id: photo.id,
         caption: photo.caption,
         imageUrl: photo.imageUrl,
-        userId: photo.userId
+        userId: photo.userId,
+        imageName: photo.imageName
     };
 }
 // Create 
@@ -25,7 +26,8 @@ router.post('/api/photos', async (req, res) => {
     const { imageUrl, caption, userId, imageName } = req.body;
     console.log('creating photo');
     const photo = await photo_1.default.create({ imageUrl, caption, userId, imageName });
-    return res.status(201).send(photo);
+    const convertedPhoto = convertPhoto(photo);
+    return res.status(201).send(convertedPhoto);
 });
 // Show
 // return single photo
@@ -53,7 +55,11 @@ router.get("/api/photos/user/:userId", async (req, res) => {
 router.put("/api/photos/:photoId", async (req, res) => {
     const photoId = req.params.photoId;
     const photo = await photo_1.default.findByIdAndUpdate(photoId, req.body, { new: true });
-    return res.status(201).send(photo);
+    if (photo) {
+        const convertedPhoto = convertPhoto(photo);
+        return res.status(201).send(convertedPhoto);
+    }
+    return res.status(200);
 });
 //Delete 
 //delete a single photo
