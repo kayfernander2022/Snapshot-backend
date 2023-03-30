@@ -1,8 +1,7 @@
 import express, {Request, Response } from 'express'
 import SharedTo from '../models/sharedTo'
-import User, {IUser} from '../models/user'
-import Photo, { IPhoto } from '../models/photo';
-import { ISharedTo } from '../models/sharedTo';
+import User from '../models/user'
+import { IPhoto } from '../models/photo';
 import { ObjectId } from 'mongoose';
 
 const router = express.Router();
@@ -32,7 +31,7 @@ function convertPhoto(photo:IPhoto, sharedFrom: string): IConvertedPhoto{
 //Create
 router.post('/api/sharedTos', async (req: Request, res: Response) =>{
   const { photoId, friendIds } = req.body as {photoId: string, friendIds: string[]};
-  console.log('creating sharedTo');//test
+  console.log('creating sharedTo');
 
   friendIds.forEach(async (friendId) => {
 
@@ -61,7 +60,7 @@ router.get("/api/sharedTos", async (req: Request, res: Response) => {
 
 //
 //Get 
-router.get("/api/sharedTos/:photoId", async (req: Request, res: Response) => {//all people photo was shared to ??**********
+router.get("/api/sharedTos/:photoId", async (req: Request, res: Response) => {//all people photo was shared to 
   const photoId = req.params.photoId;
 
   const sharedTos = await SharedTo.find({photoId});
@@ -71,15 +70,16 @@ router.get("/api/sharedTos/:photoId", async (req: Request, res: Response) => {//
 
 
 //
-router.get("/api/sharedTos/friend/:friendId", async (req: Request, res: Response) => {//all people photo was shared to??**********
+router.get("/api/sharedTos/friend/:friendId", async (req: Request, res: Response) => {//all people photo was shared to
   const friendId = req.params.friendId;
 
   const sharedTos = await SharedTo.find({friendId}).populate('photoId');
 
   console.log(JSON.stringify(sharedTos));
   
-  const convertedPhotos: IConvertedPhoto[] =  await Promise.all(sharedTos.map(async (sharedTo) => {
-  const user = await User.findById(sharedTo.photoId.userId);
+  const convertedPhotos: IConvertedPhoto[] =  await Promise.all(
+    sharedTos.map(async (sharedTo) => {
+      const user = await User.findById(sharedTo.photoId.userId);
 
       return convertPhoto(sharedTo.photoId, user?.name || 'shared by anonymous');
     }));
