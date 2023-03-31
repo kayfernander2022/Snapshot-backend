@@ -10,7 +10,7 @@ const {SECRET} = process.env;
 const router = express.Router();
 
 
-//Create??
+//Create
 router.post('/api/users', async(req: Request, res: Response) =>{
   const username = req.body.username;
   const password = await bcrypt.hash(req.body.password, 10);
@@ -26,7 +26,7 @@ router.post('/api/users', async(req: Request, res: Response) =>{
     console.log('creating user');
 
     const user = await User.create({ username: username.toLowerCase(), password, name});
-   
+  
     return res.status(201).send(user);
   }
   catch(error){
@@ -36,7 +36,7 @@ router.post('/api/users', async(req: Request, res: Response) =>{
 });
 
 
-// 
+// index
 router.get("/api/users", async (req: Request, res: Response) => {
   const users = await User.find({});
 

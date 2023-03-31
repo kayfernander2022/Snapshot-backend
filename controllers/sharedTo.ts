@@ -77,9 +77,9 @@ router.get("/api/sharedTos/friend/:friendId", async (req: Request, res: Response
 
   console.log(JSON.stringify(sharedTos));
   
-  const convertedPhotos: IConvertedPhoto[] =  await Promise.all(
+  const convertedPhotos: IConvertedPhoto[] =  await Promise.all(//wait for all promises to be returned
     sharedTos.map(async (sharedTo) => {
-      const user = await User.findById(sharedTo.photoId.userId);
+      const user = await User.findById(sharedTo.photoId.userId);//db call to get user info
 
       return convertPhoto(sharedTo.photoId, user?.name || 'shared by anonymous');
     }));

@@ -16,6 +16,7 @@ interface IConvertedPhoto{
 
 // function to convert the IPhoto object from the database to an object that the client expects.
 // Strips away all of the Mongoose document properties not needed.
+//
 function convertPhoto(photo:IPhoto): IConvertedPhoto{
   return {
           id: photo.id, 
@@ -59,8 +60,8 @@ router.get("/api/photos/user/:userId", async (req: Request, res: Response) => {
   const userId = req.params.userId;
 
   const tempPhotos = await Photo.find({userId: userId}) as IPhoto[];//get photos back from db as Iphoto
-//map an create a new object to solve problem. Data was coming back in dif format then what was needed.(too much)
-  const photos = tempPhotos.map((photo) => {
+
+  const photos = tempPhotos.map((photo) => {//map an create a new object to solve problem. Data was coming back in dif format then what was needed.(too much)
     return convertPhoto(photo); //return new object
   })
 
